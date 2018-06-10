@@ -10,12 +10,19 @@ import org.springframework.stereotype.Service;
 import com.github.zinzun.n26.statistics.model.StatisticResponse;
 import com.github.zinzun.n26.statistics.model.Transaction;
 import com.github.zinzun.n26.statistics.utils.OutOfRangeException;
-
+/***
+ * This service is use by the controller and checks if the transactions time stamp is inside the time frame.  
+ * @author Francisco Zinzun
+ *
+ */
 @Service
 public class StatisticsService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
-
+	
+	/***
+	 * This property is the time frame in milliseconds 
+	 */
 	@Value("${app.windowframe}")
     private long windowframe;
 	

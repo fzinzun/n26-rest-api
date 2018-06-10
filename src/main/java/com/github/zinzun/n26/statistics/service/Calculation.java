@@ -22,7 +22,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.github.zinzun.n26.statistics.model.Transaction;
-
+/***
+ * This class calculates the statistics using TreeMaps, as we know that treemap use only log(n) time to save, find and delete elements. Another property is that TreeMap save the elements order, that means if we theck the first element it returns the min value and if we check the last element we can get the max element.
+ * In order to run the process in a back thread this class implements ApplicationRunner which will run after the context is created.  
+ * @author Francisco J Zinzun
+ *
+ */
 @Component
 public class Calculation implements ApplicationRunner {
 	
@@ -31,20 +36,30 @@ public class Calculation implements ApplicationRunner {
 	@Value("${app.windowframe}")
     private long windowframe;
 	
-	//this queue is thread safe and is use to exchange transactions between the service and this thread
+	/***
+	 * this queue is thread safe and is use to exchange transactions between the service and this thread
+	 */
 	private BlockingQueue<Transaction> queue = new PriorityBlockingQueue<Transaction>();
 	
-	//This TreeMaps is use to keep the transactions order by timestamp 
-	// and it is a List to allow multiple transaction at the same timestamp
+	/***
+	 * This TreeMaps is use to keep the transactions order by timestamp 
+	 * and it is a List to allow multiple transaction at the same timestamp
+	 */
 	private TreeMap<Long, List<Transaction>> treeMapTransactions = new TreeMap<Long, List<Transaction>>();
 	
-	//This TreeMaps is use to keep the max and min
+	/***
+	 * This TreeMaps is use to keep the max and min
+	 */
 	private TreeMap<Double, Integer> treeMapMaxMin = new TreeMap<Double, Integer>();
 	
-	//Keeps the count of elements 
+	/***
+	 * Keeps the count of elements 
+	 */
 	private long count=0;
 
-	//Keeps the total of elements 
+	/***
+	 * Keeps the total of elements 
+	 */
 	private double total=0;
 
 	@Override
@@ -136,26 +151,46 @@ public class Calculation implements ApplicationRunner {
 		return this.queue;
 	}
 
+	/***
+	 * This function check the last element of the TreeMap where all the values are stored. As the TreeMap stores the data in order the las element is the max value. 
+	 * @return It returns the MAX value, if the TreeMap do not have any element it returns 0 
+	 */
 	public synchronized double getMaxValue() {
 		if(!this.treeMapMaxMin.isEmpty())
 			return this.treeMapMaxMin.lastKey();
 		return 0;
 	}
-
+	
+	/***
+	 * This function check the first element of the TreeMap where all the values are stored. As the TreeMap stores the data in order the first element is the min value. 
+	 * @return It returns the MIN value, if the TreeMap do not have any element it returns 0 
+	 */
 	public synchronized double getMinValue() {
 		if(!this.treeMapMaxMin.isEmpty())
 			return this.treeMapMaxMin.firstKey();
 		return 0;
 	}
 	
+	/***
+	 * This function returns the pre-calculate total amount of all transactions that its time stamp is in the windows frame. 
+	 * @return The total of transactions. 
+	 */
 	public synchronized double getTotal() {
 		return this.total;
 	}
 	
+	/***
+	 * This function returns the pre-calculate number of transactions.
+	 * @return number of transactions. 
+	 */
 	public synchronized long getCount(){
 		return this.count;
 	}
 	
+	/***
+	 * This function calculates the avg using the tal and the count elements. It is protected of division by 0
+	 * @return The avg of amounts. 
+	 */
 	public synchronized double getAvg() {
 		if(this.count > 0)
 			return this.total/this.count;

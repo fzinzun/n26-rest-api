@@ -120,11 +120,21 @@ Going back again to the **Terminal 1** you will see how the statistics numbers c
 ### Create cobertura reports
 The report of cobertura indicate the porcentage of coverity with test. In this project for the time pressure we have a very low level of coverage.
 ```
-mvn clean cobertura:cobertura
+$ mvn clean cobertura:cobertura
 ```
 Open the HTML report in
 ```
-n26-rest-api/target/site/cobertura/index.html
+$ <open> /n26-rest-api/target/site/cobertura/index.html
+```
+
+### Create javadoc
+Create the java documentation using the below command
+```
+$ mvn clean javadoc:javadoc
+```
+Then open the HTML report.
+```
+$ <open> /n26-rest-api/target/site/apidocs/index.html
 ```
 
 # Docker lover?
@@ -137,7 +147,7 @@ docker run -it --rm -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.3-j
 ```
 
 ## Run jar inside container
-The below command is similar as the previous the unique difference is that we bind the port **8080** this is use full you have another process using this port. 
+The below command is similar as the previous the unique difference is that we bind the port **8080** this is use full you have another process using this port.
 ```
 docker run -it --rm -p 8080:8080 -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn spring-boot:run
 ```

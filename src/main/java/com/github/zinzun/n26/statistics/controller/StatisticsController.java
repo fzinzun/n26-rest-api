@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.zinzun.n26.statistics.model.StatisticResponse;
 import com.github.zinzun.n26.statistics.model.Transaction;
 import com.github.zinzun.n26.statistics.service.StatisticsService;
-
+/***
+ * This class expose the REST endpoints '/transactions' and '/statistics' which are the unique two endpoints. 
+ * @author Francisco Zinzun
+ *
+ */
 @RestController
 @RequestMapping("/")
 public class StatisticsController {
