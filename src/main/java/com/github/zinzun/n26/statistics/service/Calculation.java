@@ -52,8 +52,6 @@ public class Calculation implements ApplicationRunner {
 		logger.info("BlockingQueue ready to recived transactions");
 		try {
 			while(true){
-				//logger.info("Loop");
-				long start = System.nanoTime();
 				if(!queue.isEmpty()){
 					Transaction t = queue.take();
 					logger.debug("Processing transaction " + t);
@@ -65,15 +63,6 @@ public class Calculation implements ApplicationRunner {
 				
 				this.removeTransactionsOutOfTime();
 				
-
-
-				//logger.info("Stats count:" + this.count + " total:" + this.total + " min:" + this.getMinValue() + " max:" + this.getMaxValue() + " avg:" + this.getAvg());
-				//System.out.println(this.treeMapTransactions);
-				//System.out.println(this.treeMapMaxMin);
-				//long end = System.nanoTime();
-				//System.out.println("Total time: " + (end-start));
-				
-				//Thread.sleep(500);
 			}
             
         } catch (InterruptedException e) {
@@ -147,27 +136,27 @@ public class Calculation implements ApplicationRunner {
 		return this.queue;
 	}
 
-	public double getMaxValue() {
+	public synchronized double getMaxValue() {
 		if(!this.treeMapMaxMin.isEmpty())
 			return this.treeMapMaxMin.lastKey();
 		return 0;
 	}
 
-	public double getMinValue() {
+	public synchronized double getMinValue() {
 		if(!this.treeMapMaxMin.isEmpty())
 			return this.treeMapMaxMin.firstKey();
 		return 0;
 	}
 	
-	public double getTotal() {
+	public synchronized double getTotal() {
 		return this.total;
 	}
 	
-	public long getCount(){
+	public synchronized long getCount(){
 		return this.count;
 	}
 	
-	public double getAvg() {
+	public synchronized double getAvg() {
 		if(this.count > 0)
 			return this.total/this.count;
 		return 0;
