@@ -24,9 +24,9 @@ import org.springframework.stereotype.Service;
 import com.github.zinzun.n26.statistics.model.Transaction;
 
 @Component
-public class CalculationServices implements ApplicationRunner {
+public class Calculation implements ApplicationRunner {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CalculationServices.class);
+	private static final Logger logger = LoggerFactory.getLogger(Calculation.class);
 	
 	@Value("${app.windowframe}")
     private long windowframe;

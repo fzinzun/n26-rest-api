@@ -20,7 +20,7 @@ public class StatisticsService {
     private long windowframe;
 	
 	@Autowired
-	CalculationServices calculationServices;
+	Calculation calculationServices;
 
 	public String processTransaction(Transaction transaction) {
 		long windowFrameMillis = System.currentTimeMillis() - windowframe;
