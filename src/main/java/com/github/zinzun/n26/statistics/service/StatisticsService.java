@@ -20,21 +20,18 @@ public class StatisticsService {
     private long windowframe;
 	
 	@Autowired
-	Calculation calculationServices;
+	Calculation calculation;
 
 	public String processTransaction(Transaction transaction) {
 		long windowFrameMillis = System.currentTimeMillis() - windowframe;
-    	/*System.out.println("currentTimeMillis: " + System.currentTimeMillis());
-    	System.out.println("transaction:       " + transaction.getTimestamp());
-    	System.out.println("windowFrameMillis: " + windowFrameMillis);
-    	System.out.println("-----------------: " + (transaction.getTimestamp() < windowFrameMillis));*/
+
     	if(transaction.getTimestamp() < windowFrameMillis){ 
     		logger.debug("BlockingQueue ready to recived transactions");
     		throw new OutOfRangeException();
     	}
     	
     	try {
-			calculationServices.getQueue().put(transaction);
+			calculation.getQueue().put(transaction);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,11 +41,11 @@ public class StatisticsService {
 	}
 
 	public StatisticResponse getStatistics() {
-    	StatisticResponse stat = new StatisticResponse( calculationServices.getTotal(),
-										    			calculationServices.getAvg(),
-										    			calculationServices.getMaxValue(),
-										    			calculationServices.getMinValue(),
-										    			calculationServices.getCount());
+    	StatisticResponse stat = new StatisticResponse( calculation.getTotal(),
+										    			calculation.getAvg(),
+										    			calculation.getMaxValue(),
+										    			calculation.getMinValue(),
+										    			calculation.getCount());
 		return stat;
 	}
 
